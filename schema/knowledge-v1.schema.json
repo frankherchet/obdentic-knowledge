@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/frankherchet/obdentic-knowledge/schema/knowledge-v1.schema.json",
+  "title": "OBDentic canonical knowledge document v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "namespace", "definitions"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+    },
+    "description": { "type": "string", "minLength": 1 },
+    "sets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/definitionSet" },
+      "default": []
+    },
+    "definitions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/definition" }
+    }
+  },
+  "$defs": {
+    "definitionSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "members"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "version": { "type": "integer", "minimum": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "members": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/stableId" }
+        }
+      }
+    },
+    "definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "semantic",
+        "version",
+        "operation",
+        "response",
+        "decoder",
+        "provenance",
+        "hardware_validation"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "semantic": { "$ref": "#/$defs/stableId" },
+        "version": { "type": "integer", "minimum": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "operation": { "$ref": "#/$defs/readOperation" },
+        "response": { "$ref": "#/$defs/response" },
+        "decoder": { "$ref": "#/$defs/decoder" },
+        "unit": { "type": "string", "minLength": 1 },
+        "plausible_range": { "$ref": "#/$defs/plausibleRange" },
+        "provenance": { "$ref": "#/$defs/provenance" },
+        "hardware_validation": { "$ref": "#/$defs/hardwareValidation" },
+        "notes": { "type": "string", "minLength": 1 }
+      }
+    },
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+    },
+    "readOperation": {
+      "oneOf": [
+        { "$ref": "#/$defs/udsReadDid" },
+        { "$ref": "#/$defs/obd2Mode01Pid" }
+      ]
+    },
+    "udsReadDid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "identifier"],
+      "properties": {
+        "type": { "const": "uds.read_data_by_identifier" },
+        "identifier": {
+          "type": "string",
+          "pattern": "^0x[0-9A-Fa-f]{4}$"
+        },
+        "ecu_role": { "$ref": "#/$defs/stableId" }
+      }
+    },
+    "obd2Mode01Pid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "pid"],
+      "properties": {
+        "type": { "const": "obd2.mode01.pid" },
+        "pid": {
+          "type": "string",
+          "pattern": "^0x[0-9A-Fa-f]{2}$"
+        },
+        "ecu_role": { "$ref": "#/$defs/stableId" }
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positive_service", "identifier_echo"],
+      "properties": {
+        "positive_service": {
+          "type": "string",
+          "pattern": "^0x[0-9A-Fa-f]{2}$"
+        },
+        "identifier_echo": { "type": "boolean" },
+        "minimum_payload_length": { "type": "integer", "minimum": 0 },
+        "exact_payload_length": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "decoder": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "const": "opaque_bytes" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "trim"],
+          "properties": {
+            "type": { "const": "ascii" },
+            "trim": { "enum": ["none", "space", "nul", "space_and_nul"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "width_bytes", "endian", "signed", "scale", "offset"],
+          "properties": {
+            "type": { "const": "linear_integer" },
+            "width_bytes": { "type": "integer", "minimum": 1, "maximum": 8 },
+            "endian": { "enum": ["big", "little"] },
+            "signed": { "type": "boolean" },
+            "scale": { "type": "number" },
+            "offset": { "type": "number" }
+          }
+        }
+      ]
+    },
+    "plausibleRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum", "maximum"],
+      "properties": {
+        "minimum": { "type": "number" },
+        "maximum": { "type": "number" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "confidence", "sources"],
+      "properties": {
+        "classification": {
+          "enum": ["VERIFIED", "COMMUNITY", "INFERRED", "EXPERIMENTAL"]
+        },
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/source" }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "citation"],
+      "properties": {
+        "kind": {
+          "enum": ["standard", "manufacturer_document", "community", "research", "hardware_evidence"]
+        },
+        "citation": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "hardwareValidation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["not_validated", "validated", "not_applicable"] },
+        "reference": { "type": "string", "minLength": 1 },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
