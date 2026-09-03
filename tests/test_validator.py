@@ -112,8 +112,9 @@ class ValidatorTests(unittest.TestCase):
 
     def test_validation_errors_are_deterministically_sorted(self) -> None:
         document = VALID_DOCUMENT.replace("classification: VERIFIED", "classification: UNKNOWN")
-        first = validate_repository(self.make_repo(document))
-        second = validate_repository(self.make_repo(document))
+        repo = self.make_repo(document)
+        first = validate_repository(repo)
+        second = validate_repository(repo)
         self.assertEqual(first, second)
 
 
