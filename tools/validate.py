@@ -11,7 +11,10 @@ from typing import Any
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
-from tools.applicability import applicability_key, predicate_fields_are_unique
+if __package__:
+    from .applicability import applicability_key, predicate_fields_are_unique
+else:
+    from applicability import applicability_key, predicate_fields_are_unique
 
 SCHEMA_PATHS = {
     1: Path("schema/knowledge-v1.schema.json"),
