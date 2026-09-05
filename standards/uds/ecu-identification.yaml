@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 namespace: uds.identification
 description: >-
   Bounded ISO 14229 ReadDataByIdentifier candidates for read-only ECU
@@ -31,16 +31,19 @@ definitions:
     semantic: ecu.boot_software_identification
     version: 1
     description: Boot Software Identification
+    applicability: &generic_iso14229
+      kind: generic
+      provenance: &iso14229
+        classification: VERIFIED
+        confidence: high
+        sources:
+          - kind: standard
+            citation: "ISO 14229-1, standardized data identifiers for ReadDataByIdentifier"
+            note: "The DID meaning and generic applicability are standardized; payload interpretation and concrete ECU support remain separate concerns."
     operation: { type: uds.read_data_by_identifier, identifier: "0xF180" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
-    provenance: &iso14229
-      classification: VERIFIED
-      confidence: high
-      sources:
-        - kind: standard
-          citation: "ISO 14229-1, standardized data identifiers for ReadDataByIdentifier"
-          note: "The DID meaning is standardized; payload interpretation may still require supplier/manufacturer knowledge."
+    provenance: *iso14229
     hardware_validation: &standard_support
       status: not_applicable
       note: "Canonical DID meaning does not imply that any particular ECU supports the DID; support is runtime evidence."
@@ -49,6 +52,7 @@ definitions:
     semantic: ecu.application_software_identification
     version: 1
     description: Application Software Identification
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF181" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -59,6 +63,7 @@ definitions:
     semantic: ecu.manufacturer_spare_part_number
     version: 1
     description: Vehicle Manufacturer Spare Part Number
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF187" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -69,6 +74,7 @@ definitions:
     semantic: ecu.manufacturer_software_number
     version: 1
     description: Vehicle Manufacturer ECU Software Number
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF188" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -79,6 +85,7 @@ definitions:
     semantic: ecu.manufacturer_software_version
     version: 1
     description: Vehicle Manufacturer ECU Software Version Number
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF189" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -89,6 +96,7 @@ definitions:
     semantic: ecu.system_supplier_identifier
     version: 1
     description: System Supplier Identifier
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF18A" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -99,6 +107,7 @@ definitions:
     semantic: ecu.manufacturing_date
     version: 1
     description: ECU Manufacturing Date
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF18B" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -109,6 +118,7 @@ definitions:
     semantic: ecu.serial_number
     version: 1
     description: ECU Serial Number
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF18C" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -122,6 +132,7 @@ definitions:
     semantic: ecu.manufacturer_hardware_number
     version: 1
     description: Vehicle Manufacturer ECU Hardware Number
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF191" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -132,6 +143,7 @@ definitions:
     semantic: ecu.system_supplier_hardware_number
     version: 1
     description: System Supplier ECU Hardware Number
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF192" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -142,6 +154,7 @@ definitions:
     semantic: ecu.system_supplier_hardware_version
     version: 1
     description: System Supplier ECU Hardware Version Number
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF193" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -152,6 +165,7 @@ definitions:
     semantic: ecu.system_supplier_software_number
     version: 1
     description: System Supplier ECU Software Number
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF194" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -162,6 +176,7 @@ definitions:
     semantic: ecu.system_supplier_software_version
     version: 1
     description: System Supplier ECU Software Version Number
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF195" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
@@ -172,6 +187,7 @@ definitions:
     semantic: ecu.system_name
     version: 1
     description: System Name / Engine Type
+    applicability: *generic_iso14229
     operation: { type: uds.read_data_by_identifier, identifier: "0xF197" }
     response: { positive_service: "0x62", identifier_echo: true }
     decoder: { type: opaque_bytes }
