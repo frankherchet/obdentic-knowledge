@@ -11,7 +11,15 @@ from typing import Any
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
-SCHEMA_PATH = Path("schema/knowledge-v1.schema.json")
+if __package__:
+    from .applicability import applicability_key, predicate_fields_are_unique
+else:
+    from applicability import applicability_key, predicate_fields_are_unique
+
+SCHEMA_PATHS = {
+    1: Path("schema/knowledge-v1.schema.json"),
+    2: Path("schema/knowledge-v2.schema.json"),
+}
 KNOWLEDGE_ROOTS = (Path("standards"), Path("manufacturers"), Path("semantic"))
 ECU_IDENTIFICATION_SET = "uds.standard.ecu_identification"
 VIN_SEMANTIC = "vehicle.vin"
@@ -55,10 +63,18 @@ def _format_jsonschema_error(path: Path, error: Any) -> str:
     return f"{prefix}: {error.message}"
 
 
+def _validators(root: Path) -> dict[int, Draft202012Validator]:
+    validators: dict[int, Draft202012Validator] = {}
+    for version, relative_path in SCHEMA_PATHS.items():
+        schema = _load_json(root / relative_path)
+        validators[version] = Draft202012Validator(
+            schema, format_checker=FormatChecker()
+        )
+    return validators
+
+
 def validate_repository(root: Path) -> list[str]:
-    schema_path = root / SCHEMA_PATH
-    schema = _load_json(schema_path)
-    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+    validators = _validators(root)
 
     files = _knowledge_files(root)
     if not files:
@@ -66,14 +82,23 @@ def validate_repository(root: Path) -> list[str]:
 
     errors: list[str] = []
     definition_ids: dict[str, Path] = {}
-    semantic_ids: dict[str, Path] = {}
+    semantic_definitions: dict[
+        str, list[tuple[Path, int, dict[str, Any]]]
+    ] = {}
     sets: dict[str, tuple[Path, dict[str, Any]]] = {}
-    definitions: dict[str, tuple[Path, dict[str, Any]]] = {}
 
     for path in files:
         document = _load_yaml(path)
+        schema_version = document.get("schema_version")
+        if type(schema_version) is not int or schema_version not in validators:
+            errors.append(
+                f"{path}: unsupported schema_version {schema_version!r}; "
+                f"supported versions are {sorted(validators)}"
+            )
+            continue
+
         schema_errors = sorted(
-            validator.iter_errors(document),
+            validators[schema_version].iter_errors(document),
             key=lambda error: [str(part) for part in error.absolute_path],
         )
         errors.extend(_format_jsonschema_error(path, error) for error in schema_errors)
@@ -85,56 +110,86 @@ def validate_repository(root: Path) -> list[str]:
             semantic_id = definition["semantic"]
             if definition_id in definition_ids:
                 errors.append(
-                    f"{path}: duplicate definition id {definition_id!r}; first seen in {definition_ids[definition_id]}"
+                    f"{path}: duplicate definition id {definition_id!r}; "
+                    f"first seen in {definition_ids[definition_id]}"
                 )
             else:
                 definition_ids[definition_id] = path
-                definitions[definition_id] = (path, definition)
 
-            # V1 intentionally rejects semantic shadowing. Applicability-aware
-            # conflict resolution is introduced explicitly by knowledge issue #3.
-            if semantic_id in semantic_ids:
+            if not predicate_fields_are_unique(definition):
                 errors.append(
-                    f"{path}: duplicate semantic id {semantic_id!r}; first seen in {semantic_ids[semantic_id]}"
+                    f"{path}: definition {definition_id!r} repeats an applicability "
+                    "predicate field"
                 )
-            else:
-                semantic_ids[semantic_id] = path
+
+            semantic_definitions.setdefault(semantic_id, []).append(
+                (path, schema_version, definition)
+            )
 
         for definition_set in document.get("sets", []):
             set_id = definition_set["id"]
             if set_id in sets:
-                errors.append(f"{path}: duplicate set id {set_id!r}; first seen in {sets[set_id][0]}")
+                errors.append(
+                    f"{path}: duplicate set id {set_id!r}; "
+                    f"first seen in {sets[set_id][0]}"
+                )
             else:
                 sets[set_id] = (path, definition_set)
 
+    for semantic_id, candidates in sorted(semantic_definitions.items()):
+        if len(candidates) < 2:
+            continue
+
+        keys: dict[tuple[Any, ...], tuple[Path, str]] = {}
+        generic: tuple[Path, str] | None = None
+        for path, schema_version, definition in sorted(
+            candidates, key=lambda item: item[2]["id"]
+        ):
+            key = applicability_key(schema_version, definition)
+            definition_id = definition["id"]
+            if key[0] == "generic":
+                if generic is not None:
+                    errors.append(
+                        f"{path}: semantic {semantic_id!r} has multiple generic "
+                        f"definitions {generic[1]!r} and {definition_id!r}"
+                    )
+                else:
+                    generic = (path, definition_id)
+            if key in keys:
+                first_path, first_id = keys[key]
+                errors.append(
+                    f"{path}: semantic {semantic_id!r} has identical applicability "
+                    f"for definitions {first_id!r} and {definition_id!r}; "
+                    f"first seen in {first_path}"
+                )
+            else:
+                keys[key] = (path, definition_id)
+
     for set_id, (path, definition_set) in sorted(sets.items()):
-        semantic_to_definition = {
-            definition["semantic"]: definition
-            for _, definition in definitions.values()
-        }
         for member in definition_set["members"]:
-            if member not in semantic_to_definition:
-                errors.append(f"{path}: set {set_id!r} references unknown semantic {member!r}")
+            if member not in semantic_definitions:
+                errors.append(
+                    f"{path}: set {set_id!r} references unknown semantic {member!r}"
+                )
 
     if ECU_IDENTIFICATION_SET in sets:
         path, definition_set = sets[ECU_IDENTIFICATION_SET]
-        semantic_to_definition = {
-            definition["semantic"]: definition
-            for _, definition in definitions.values()
-        }
         for member in definition_set["members"]:
-            definition = semantic_to_definition.get(member)
-            if definition is None:
-                continue
-            operation = definition["operation"]
-            if operation["type"] != "uds.read_data_by_identifier":
-                errors.append(
-                    f"{path}: {ECU_IDENTIFICATION_SET} member {member!r} is not a UDS ReadDataByIdentifier operation"
-                )
-            if operation.get("identifier", "").upper() == VIN_DID or member == VIN_SEMANTIC:
-                errors.append(
-                    f"{path}: {ECU_IDENTIFICATION_SET} must not include VIN/F190; vehicle identity is separate"
-                )
+            for _, _, definition in semantic_definitions.get(member, []):
+                operation = definition["operation"]
+                if operation["type"] != "uds.read_data_by_identifier":
+                    errors.append(
+                        f"{path}: {ECU_IDENTIFICATION_SET} member {member!r} "
+                        "is not a UDS ReadDataByIdentifier operation"
+                    )
+                if (
+                    operation.get("identifier", "").upper() == VIN_DID
+                    or member == VIN_SEMANTIC
+                ):
+                    errors.append(
+                        f"{path}: {ECU_IDENTIFICATION_SET} must not include VIN/F190; "
+                        "vehicle identity is separate"
+                    )
 
     return sorted(errors)
 

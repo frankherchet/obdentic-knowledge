@@ -26,11 +26,12 @@ The three concepts must remain distinct:
 
 ## Repository layout
 
-Current v1 layout:
+Current layout:
 
 ```text
 schema/
   knowledge-v1.schema.json
+  knowledge-v2.schema.json
 standards/
   uds/
     ecu-identification.yaml
@@ -38,16 +39,19 @@ manufacturers/
   ... future reviewed manufacturer/ECU knowledge
 semantic/
   ... future cross-protocol semantic definitions
- tools/
+docs/
+  applicability.md
+tools/
+  applicability.py
   validate.py
- tests/
+tests/
 ```
 
 `manufacturers/` and `semantic/` may be absent until the first definitions are added. The validator enumerates all canonical YAML files in deterministic path order.
 
 ## Schema v1
 
-Every canonical YAML document declares:
+Every v1 canonical YAML document declares:
 
 ```yaml
 schema_version: 1
@@ -57,11 +61,23 @@ definitions: []
 
 Definitions have stable IDs and semantic IDs, a constrained read-only operation, response contract, a decoder chosen from a closed primitive set, provenance/confidence and hardware-validation state.
 
+Schema v1 is immutable. Existing pinned revisions and captures must continue to validate against the exact contract they were created with.
+
+## Schema v2 and applicability
+
+Schema v2 adds explicit applicability without changing the executable operation vocabulary. Every v2 definition declares either generic applicability or an exact ECU-fingerprint predicate set with separate applicability provenance.
+
+A v1 definition is treated as generic by an applicability-aware resolver. A v2 specific definition may coexist with a generic definition for the same semantic. Resolution is conservative and deterministic: exact more-specific matches may supersede generic knowledge, equal-specificity matches remain ambiguous, and an incomplete specific candidate blocks unsafe generic fallback.
+
+VIN is not an applicability key. Matching uses a closed set of normalized vehicle/ECU identity facts and exact string equality only — no regex, ranges, fuzzy matching, ML or decoded-value plausibility.
+
+See [docs/applicability.md](docs/applicability.md) for the complete fingerprint vocabulary, matching states, specificity rules and ambiguity behavior.
+
 Unknown schema versions and unknown fields fail validation.
 
 ### Closed operation vocabulary
 
-The schema currently permits only explicitly modeled read operations such as:
+The schemas currently permit only explicitly modeled read operations such as:
 
 ```yaml
 operation:
@@ -71,7 +87,7 @@ operation:
 
 and the initial generic OBD-II Mode 01 PID primitive reserved for staged migration.
 
-The schema does **not** contain a raw byte/string escape hatch. Canonical knowledge cannot express arbitrary CAN frames, UDS service payloads, ELM commands, session control, SecurityAccess, coding/adaptation, actuator tests, DTC clear or arbitrary RoutineControl.
+The schemas do **not** contain a raw byte/string escape hatch. Canonical knowledge cannot express arbitrary CAN frames, UDS service payloads, ELM commands, session control, SecurityAccess, coding/adaptation, actuator tests, DTC clear or arbitrary RoutineControl.
 
 OBDentic still validates loaded definitions against its own closed Rust operation/decoder types and `SafetyPolicy`. The Knowledge DB cannot expand the executable safety capability of the core.
 
@@ -112,7 +128,7 @@ python -m unittest discover -s tests -v
 
 CI runs both commands for pull requests and `main`.
 
-The validator additionally checks repository-level invariants that are awkward to express in a single JSON Schema document, including duplicate IDs/semantics, set references and the explicit exclusion of VIN/F190 from the ECU-identification discovery set.
+The validator additionally checks repository-level invariants that are awkward to express in one JSON Schema document, including duplicate definition IDs, applicability-aware semantic conflicts, duplicate predicate fields, set references and the explicit exclusion of VIN/F190 from the ECU-identification discovery set.
 
 ## Provenance and promotion
 
@@ -123,7 +139,7 @@ Research status remains explicit:
 - `INFERRED`
 - `EXPERIMENTAL`
 
-Confidence and hardware-validation status are separate metadata dimensions. A plausible value does not make knowledge VERIFIED, and a standards-defined DID does not imply support on a concrete ECU.
+Confidence, applicability provenance and hardware-validation status are separate metadata dimensions. A plausible value does not make knowledge VERIFIED, an applicability match does not validate a decoder, and a standards-defined DID does not imply support on a concrete ECU.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for evidence, privacy, clean-room and promotion rules.
 
@@ -153,4 +169,4 @@ Captures should eventually preserve both the OBDentic core revision and exact Kn
 
 ## Tracking
 
-Initial Knowledge DB work is tracked by issues #1–#6 in this repository and the discovery/knowledge integration epic `frankherchet/obdentic#22` with implementation slices `#84`–`#90`.
+Initial Knowledge DB work is tracked by issues #1–#8 in this repository and the discovery/knowledge integration epic `frankherchet/obdentic#22` with implementation slices `#84`–`#90`.
