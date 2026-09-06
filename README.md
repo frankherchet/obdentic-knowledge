@@ -41,6 +41,7 @@ semantic/
   ... future cross-protocol semantic definitions
 docs/
   applicability.md
+  decoders.md
 tools/
   applicability.py
   validate.py
@@ -71,7 +72,7 @@ A v1 definition is treated as generic by an applicability-aware resolver. A v2 s
 
 VIN is not an applicability key. Matching uses a closed set of normalized vehicle/ECU identity facts and exact string equality only — no regex, ranges, fuzzy matching, ML or decoded-value plausibility.
 
-See [docs/applicability.md](docs/applicability.md) for the complete fingerprint vocabulary, matching states, specificity rules and ambiguity behavior.
+See [docs/applicability.md](docs/applicability.md) for the complete fingerprint vocabulary, matching states, specificity rules and ambiguity behavior. See [docs/decoders.md](docs/decoders.md) for deterministic decoder semantics, including the exact trailing-only ASCII padding contract.
 
 Unknown schema versions and unknown fields fail validation.
 
