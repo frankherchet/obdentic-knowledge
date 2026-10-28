@@ -32,6 +32,7 @@ Current layout:
 schema/
   knowledge-v1.schema.json
   knowledge-v2.schema.json
+  knowledge-v3.schema.json
 standards/
   uds/
     ecu-identification.yaml
@@ -91,6 +92,21 @@ and the initial generic OBD-II Mode 01 PID primitive reserved for staged migrati
 The schemas do **not** contain a raw byte/string escape hatch. Canonical knowledge cannot express arbitrary CAN frames, UDS service payloads, ELM commands, session control, SecurityAccess, coding/adaptation, actuator tests, DTC clear or arbitrary RoutineControl.
 
 OBDentic still validates loaded definitions against its own closed Rust operation/decoder types and `SafetyPolicy`. The Knowledge DB cannot expand the executable safety capability of the core.
+
+## Schema v3: ECU request targets
+
+Schema v3 is a separate document kind (`ecu_targets`, ADR 0002 in `frankherchet/obdentic`); v1 and v2 are unchanged. A target lists an 11-bit CAN request/response id pair, a logical role with its own confidence, manufacturer applicability, provenance and hardware-validation state. Targets are probe candidates only: the schema has no operation, payload, session or write vocabulary and a target proves neither installation nor reachability. `manufacturers/vag/ecu-targets.yaml` holds the first 18 VAG candidates. The validator additionally checks unique ids, request/response id offsets against `response_id_rule`, and that every definition `operation.ecu_role` names a role declared by some target.
+
+A v2 definition is linked to a target through `operation.ecu_role` (for example `engine` selects the `7E0`/`7E8` target).
+
+## EA189 engine DID candidates
+
+`manufacturers/vag/ea189-engine.yaml` holds read-only ReadDataByIdentifier candidates for the engine ECU, all `COMMUNITY`, `not_validated`, decoded by `linear_integer`. Raw status values stay raw numbers. Applicability is a draft (`vehicle.manufacturer` = `vag`, `ecu.logical_role` = `engine`) until real F187/F189 engine identification evidence exists; it is deliberately not narrower than the evidence supports and not broader than the engine role.
+
+Schema v2 stays unchanged, so there is no `group` or `session_requirement` field:
+
+- **Group** is the third segment of the definition id (`vag.ea189.<group>.<name>`), for example `dpf`, `exhaust`, `injection`.
+- **Session candidates** live in `ea189-engine-session-candidates.yaml` (ids `vag.ea189_session.<group>.<name>`). Their source marks an extended session as a setup step; default-session behaviour is unverified. Consumers must not poll them in normal profiles, only in a closed learning run without a session change.
 
 ## Standard UDS ECU identification
 

@@ -1,0 +1,775 @@
+schema_version: 2
+namespace: manufacturers.vag.ea189_engine_session_candidates
+description: >-
+  EA189 engine DID candidates whose source marks an extended session as a setup step. Whether they answer in
+  the default session is unverified. These are NOT part of normal polling: consumers must treat every
+  definition in this file (ids vag.ea189_session.<group>.<name>) as session_requirement unverified_default and
+  may only try them in a closed learning run without session change. Kept separate because schema v2
+  has no session field and the definition schema stays unchanged.
+  Applicability is a draft, see ea189-engine.yaml.
+
+definitions:
+  - id: vag.ea189_session.air.intercooler_outlet_temperature
+    semantic: air.intercooler_outlet_temperature
+    version: 1
+    description: >-
+      Intercooler air outlet temperature.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1628"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.1
+      offset: -273.1
+    unit: "°C"
+    plausible_range:
+      minimum: -60
+      maximum: 300
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.dpf.differential_pressure_variant2
+    semantic: dpf.differential_pressure_variant2
+    version: 1
+    description: >-
+      Particulate filter differential pressure, second variant.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10F3"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 1
+      offset: 0
+    unit: "hPa"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.dpf.field_limit
+    semantic: dpf.field_limit
+    version: 1
+    description: >-
+      Particulate filter field limit.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11F6"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.01
+      offset: 0
+    unit: "g"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.dpf.oil_ash_residue
+    semantic: dpf.oil_ash_residue
+    version: 1
+    description: >-
+      Particulate filter oil ash residue.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x178C"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.1
+      offset: 0
+    unit: "g"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.dpf.service_limit
+    semantic: dpf.service_limit
+    version: 1
+    description: >-
+      Particulate filter service limit.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x12CB"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.01
+      offset: 0
+    unit: "g"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.dpf.surface_temperature
+    semantic: dpf.surface_temperature
+    version: 1
+    description: >-
+      Particulate filter surface temperature.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1044"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.1
+      offset: -273.1
+    unit: "°C"
+    plausible_range:
+      minimum: -60
+      maximum: 1300
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.egr.low_pressure_closing
+    semantic: egr.low_pressure_closing
+    version: 1
+    description: >-
+      Low pressure EGR closing.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1314"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.0122070312
+      offset: 0
+    unit: "%"
+    plausible_range:
+      minimum: 0
+      maximum: 100
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.electrical.battery_voltage
+    semantic: electrical.battery_voltage
+    version: 1
+    description: >-
+      Battery voltage as seen by the engine ECU.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x105E"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.02
+      offset: 0
+    unit: "V"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.electrical.generator_load
+    semantic: electrical.generator_load
+    version: 1
+    description: >-
+      Generator load.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x105C"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.01
+      offset: 0
+    unit: "%"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.engine.lambda_bank1_sensor1
+    semantic: engine.lambda_bank1_sensor1
+    version: 1
+    description: >-
+      Oxygen sensor 1 bank 1, lambda actual value.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x113D"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.fuel.level_tank
+    semantic: fuel.level_tank
+    version: 1
+    description: >-
+      Fuel tank level.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x100C"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.01
+      offset: 0
+    unit: "l"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.injection.post_injection1_quantity_specified
+    semantic: injection.post_injection1_quantity_specified
+    version: 1
+    description: >-
+      Post-injection 1, specified quantity.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x163C"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.01
+      offset: 0
+    unit: "mg/Hub"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.injection.post_injection2_quantity_specified
+    semantic: injection.post_injection2_quantity_specified
+    version: 1
+    description: >-
+      Post-injection 2, specified quantity.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x163B"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.01
+      offset: 0
+    unit: "mg/Hub"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.injection.post_injection3_quantity_specified
+    semantic: injection.post_injection3_quantity_specified
+    version: 1
+    description: >-
+      Post-injection 3, specified quantity.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x167D"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.01
+      offset: 0
+    unit: "mg/Hub"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.oil.dynamic_average
+    semantic: oil.dynamic_average
+    version: 1
+    description: >-
+      Engine oil level, dynamic average.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x123F"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.004
+      offset: 0
+    unit: "mm"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.oil.last_dynamic_value
+    semantic: oil.last_dynamic_value
+    version: 1
+    description: >-
+      Engine oil level, last dynamic value.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x123C"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.004
+      offset: 0
+    unit: "mm"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.oil.level_max
+    semantic: oil.level_max
+    version: 1
+    description: >-
+      Engine oil maximum level.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11C4"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.004
+      offset: 0
+    unit: "mm"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
+  - id: vag.ea189_session.oil.level_min
+    semantic: oil.level_min
+    version: 1
+    description: >-
+      Engine oil minimum level.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11C5"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.004
+      offset: 0
+    unit: "mm"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks this read as needing an extended session. Session behaviour is unverified: it has not been tried in the default session. Do not poll it in normal profiles; only a closed learning run may try it without a session change.
