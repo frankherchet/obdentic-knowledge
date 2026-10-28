@@ -1,0 +1,3658 @@
+schema_version: 2
+namespace: manufacturers.vag.ea189_engine
+description: >-
+  EA189 engine read-only DID candidates (UDS ReadDataByIdentifier to the engine ECU, target role engine,
+  see ecu-targets.yaml) that the source reads without a session change. Every entry is a candidate
+  definition, not validated on hardware. Group = third segment of the definition id (vag.ea189.<group>.<name>).
+  Applicability is a draft: vehicle manufacturer and engine role only, because EA189 engine identification
+  predicates (F187/F189) need real evidence (obdentic #85). Plausible ranges are coarse sanity bounds, not decode evidence.
+  Provenance cites only the archive version and entry count.
+
+definitions:
+  - id: vag.ea189.air.charge_limit_overcharge
+    semantic: air.charge_limit_overcharge
+    version: 1
+    description: >-
+      Charge limit for over-charge.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1356"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "g"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.air.throttle_valve_adaptation_actual
+    semantic: air.throttle_valve_adaptation_actual
+    version: 1
+    description: >-
+      Throttle valve adaptation, actual value.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x12FC"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "%"
+    plausible_range:
+      minimum: 0
+      maximum: 100
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.boost.pressure_before_throttle_calculated
+    semantic: boost.pressure_before_throttle_calculated
+    version: 1
+    description: >-
+      Calculated boost pressure before the throttle valve.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x181A"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 2500
+      offset: 0
+    unit: "hPa"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Scale taken from the source as is; unusually large per count, treat with suspicion.
+  - id: vag.ea189.boost.regulator_feedback
+    semantic: boost.regulator_feedback
+    version: 1
+    description: >-
+      Boost pressure regulator feedback.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11CC"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "%"
+    plausible_range:
+      minimum: 0
+      maximum: 100
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.boost.turbine_actuator_activation
+    semantic: boost.turbine_actuator_activation
+    version: 1
+    description: >-
+      Turbine actuator activation, bank 1.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x117E"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "%"
+    plausible_range:
+      minimum: 0
+      maximum: 100
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.boost.boost_pressure_actual
+    semantic: engine.boost_pressure_actual
+    version: 1
+    description: >-
+      Boost pressure, actual.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1057"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 1
+      offset: 0
+    unit: "hPa"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.boost.boost_pressure_commanded
+    semantic: engine.boost_pressure_commanded
+    version: 1
+    description: >-
+      Boost pressure, commanded.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1149"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 1
+      offset: 0
+    unit: "hPa"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.camshaft.intake_adaptation_phase_length
+    semantic: camshaft.intake_adaptation_phase_length
+    version: 1
+    description: >-
+      Intake camshaft adaptation value, phase length.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x12FE"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.02
+      offset: 0
+    unit: "°"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.camshaft.position_end_phase
+    semantic: camshaft.position_end_phase
+    version: 1
+    description: >-
+      Camshaft position angle, end phase.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1341"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.2
+      offset: 0
+    unit: "°"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.camshaft.position_start_phase
+    semantic: camshaft.position_start_phase
+    version: 1
+    description: >-
+      Camshaft position angle, start phase.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1007"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.2
+      offset: 0
+    unit: "°"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.cooling.fan1_duty
+    semantic: cooling.fan1_duty
+    version: 1
+    description: >-
+      Coolant fan 1 duty cycle.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1116"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "%"
+    plausible_range:
+      minimum: 0
+      maximum: 100
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.cooling.fan2_duty
+    semantic: cooling.fan2_duty
+    version: 1
+    description: >-
+      Coolant fan 2 duty cycle.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1114"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "%"
+    plausible_range:
+      minimum: 0
+      maximum: 100
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.cooling.radiator_outlet_temperature_actual
+    semantic: cooling.radiator_outlet_temperature_actual
+    version: 1
+    description: >-
+      Radiator outlet coolant temperature, actual.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1626"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.1
+      offset: -273.1
+    unit: "°C"
+    plausible_range:
+      minimum: -60
+      maximum: 300
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.cooling.radiator_outlet_temperature_commanded
+    semantic: cooling.radiator_outlet_temperature_commanded
+    version: 1
+    description: >-
+      Radiator outlet coolant temperature, commanded.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1111"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.1
+      offset: -273.1
+    unit: "°C"
+    plausible_range:
+      minimum: -60
+      maximum: 300
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.dpf.differential_pressure
+    semantic: dpf.differential_pressure
+    version: 1
+    description: >-
+      Particulate filter differential pressure.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x14F5"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 1
+      offset: 0
+    unit: "hPa"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks setup, but OBDentic already probed this DID in the default session before the definitions moved here.
+  - id: vag.ea189.dpf.differential_pressure_offset
+    semantic: dpf.differential_pressure_offset
+    version: 1
+    description: >-
+      Particulate filter differential pressure offset.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10F1"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 1
+      offset: 0
+    unit: "hPa"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.dpf.distance_since_regeneration
+    semantic: dpf.distance_since_regeneration
+    version: 1
+    description: >-
+      Distance driven since the last particulate filter regeneration.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1156"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 4
+    decoder:
+      type: linear_integer
+      width_bytes: 4
+      endian: big
+      signed: false
+      scale: 0.001
+      offset: 0
+    unit: "km"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks setup, but OBDentic already probed this DID in the default session before the definitions moved here.
+  - id: vag.ea189.dpf.field_regeneration_lock_status
+    semantic: dpf.field_regeneration_lock_status
+    version: 1
+    description: >-
+      Field regeneration lock status, raw status, no interpretation.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11C1"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 1
+    decoder:
+      type: linear_integer
+      width_bytes: 1
+      endian: big
+      signed: false
+      scale: 1
+      offset: 0
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      raw status, no interpretation
+  - id: vag.ea189.dpf.field_regeneration_request_status
+    semantic: dpf.field_regeneration_request_status
+    version: 1
+    description: >-
+      Field regeneration request status, raw status, no interpretation.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x115B"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 1
+    decoder:
+      type: linear_integer
+      width_bytes: 1
+      endian: big
+      signed: false
+      scale: 1
+      offset: 0
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      raw status, no interpretation
+  - id: vag.ea189.dpf.fuel_consumption_since_regeneration
+    semantic: dpf.fuel_consumption_since_regeneration
+    version: 1
+    description: >-
+      Fuel consumed since the last particulate filter regeneration.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x115A"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "l"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.dpf.oil_ash_volume
+    semantic: dpf.oil_ash_volume
+    version: 1
+    description: >-
+      Particulate filter oil ash volume.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1153"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "l"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.dpf.service_regeneration_duration
+    semantic: dpf.service_regeneration_duration
+    version: 1
+    description: >-
+      Current service regeneration duration.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1164"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 4
+    decoder:
+      type: linear_integer
+      width_bytes: 4
+      endian: big
+      signed: false
+      scale: 0.0001666667
+      offset: 0
+    unit: "min"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.dpf.service_regeneration_status
+    semantic: dpf.service_regeneration_status
+    version: 1
+    description: >-
+      Service regeneration status, raw status, no interpretation.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x115C"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 1
+    decoder:
+      type: linear_integer
+      width_bytes: 1
+      endian: big
+      signed: false
+      scale: 1
+      offset: 0
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      raw status, no interpretation
+  - id: vag.ea189.dpf.soot_index
+    semantic: dpf.soot_index
+    version: 1
+    description: >-
+      Soot index.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1354"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 1
+      offset: 0
+    unit: "m"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.dpf.soot_mass_calculated
+    semantic: dpf.soot_mass_calculated
+    version: 1
+    description: >-
+      Particulate filter soot mass, calculated.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x114F"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.01
+      offset: 0
+    unit: "g"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks setup, but OBDentic already probed this DID in the default session before the definitions moved here.
+  - id: vag.ea189.dpf.soot_mass_measured
+    semantic: dpf.soot_mass_measured
+    version: 1
+    description: >-
+      Particulate filter soot mass, measured.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x114E"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "g"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks setup, but OBDentic already probed this DID in the default session before the definitions moved here.
+  - id: vag.ea189.dpf.time_since_regeneration
+    semantic: dpf.time_since_regeneration
+    version: 1
+    description: >-
+      Time since the last particulate filter regeneration.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x115E"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 4
+    decoder:
+      type: linear_integer
+      width_bytes: 4
+      endian: big
+      signed: false
+      scale: 1
+      offset: 0
+    unit: "s"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Source marks setup, but OBDentic already probed this DID in the default session before the definitions moved here. Raw count is seconds; the source shows minutes.
+  - id: vag.ea189.egr.valve_duty
+    semantic: egr.valve_duty
+    version: 1
+    description: >-
+      EGR valve duty cycle.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10C2"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "%"
+    plausible_range:
+      minimum: 0
+      maximum: 100
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.engine.acceleration
+    semantic: engine.acceleration
+    version: 1
+    description: >-
+      Longitudinal acceleration as seen by the engine ECU.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1187"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.001
+      offset: 0
+    unit: "m/s²"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.engine.compression_test_cylinder1
+    semantic: engine.compression_test_cylinder1
+    version: 1
+    description: >-
+      Compression test speed value, cylinder 1.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1129"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.5
+      offset: 0
+    unit: "1/min"
+    plausible_range:
+      minimum: 0
+      maximum: 8000
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.engine.compression_test_cylinder2
+    semantic: engine.compression_test_cylinder2
+    version: 1
+    description: >-
+      Compression test speed value, cylinder 2.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x112A"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.5
+      offset: 0
+    unit: "1/min"
+    plausible_range:
+      minimum: 0
+      maximum: 8000
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.engine.compression_test_cylinder3
+    semantic: engine.compression_test_cylinder3
+    version: 1
+    description: >-
+      Compression test speed value, cylinder 3.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x112B"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.5
+      offset: 0
+    unit: "1/min"
+    plausible_range:
+      minimum: 0
+      maximum: 8000
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.engine.compression_test_cylinder4
+    semantic: engine.compression_test_cylinder4
+    version: 1
+    description: >-
+      Compression test speed value, cylinder 4.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x112C"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.5
+      offset: 0
+    unit: "1/min"
+    plausible_range:
+      minimum: 0
+      maximum: 8000
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.engine.preheat_time
+    semantic: engine.preheat_time
+    version: 1
+    description: >-
+      Glow preheat time.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x111F"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 100
+      offset: 0
+    unit: "ms"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.engine.regulation_factor_total
+    semantic: engine.regulation_factor_total
+    version: 1
+    description: >-
+      Total regulation factor.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10E4"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.0001
+      offset: 0
+    unit: "%"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Scale taken from the source as is; meaning of the value unconfirmed.
+  - id: vag.ea189.engine.wear_index
+    semantic: engine.wear_index
+    version: 1
+    description: >-
+      Engine wear index.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10E2"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 1
+      offset: 0
+    unit: "m"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.exhaust.temperature_post_dpf
+    semantic: exhaust.temperature.post_dpf
+    version: 1
+    description: >-
+      Exhaust gas temperature sensor 4, downstream of the particulate filter (position label is a hypothesis).
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10F9"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.1
+      offset: -273.1
+    unit: "°C"
+    plausible_range:
+      minimum: -60
+      maximum: 1300
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Same DID is also named by the source as a particulate filter output/input temperature.
+  - id: vag.ea189.exhaust.temperature_pre_dpf
+    semantic: exhaust.temperature.pre_dpf
+    version: 1
+    description: >-
+      Exhaust gas temperature sensor 3, upstream of the particulate filter (position label is a hypothesis).
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11B2"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.1
+      offset: -273.1
+    unit: "°C"
+    plausible_range:
+      minimum: -60
+      maximum: 1300
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Same DID is also named by the source as a particulate filter output/input temperature.
+  - id: vag.ea189.exhaust.temperature_sensor1
+    semantic: exhaust.temperature.sensor1
+    version: 1
+    description: >-
+      Exhaust gas temperature sensor 1.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10FB"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.1
+      offset: -273.1
+    unit: "°C"
+    plausible_range:
+      minimum: -60
+      maximum: 1300
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.exhaust.temperature_sensor2
+    semantic: exhaust.temperature.sensor2
+    version: 1
+    description: >-
+      Exhaust gas temperature sensor 2.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x14F7"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.1
+      offset: -273.1
+    unit: "°C"
+    plausible_range:
+      minimum: -60
+      maximum: 1300
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.exhaust.torque_reduction_temperature
+    semantic: exhaust.torque_reduction_temperature
+    version: 1
+    description: >-
+      Torque reduction caused by exhaust temperature.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10E3"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.0001
+      offset: 0
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+    notes: >-
+      Scale taken from the source as is; meaning of the value unconfirmed.
+  - id: vag.ea189.fuel.fuel_temperature
+    semantic: engine.fuel_temperature
+    version: 1
+    description: >-
+      Fuel temperature.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x162D"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.1
+      offset: -273.1
+    unit: "°C"
+    plausible_range:
+      minimum: -60
+      maximum: 300
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.fuel.rail_pressure_actual
+    semantic: engine.rail_pressure_actual
+    version: 1
+    description: >-
+      High fuel pressure, actual.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1169"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 100
+      offset: 0
+    unit: "hPa"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.fuel.rail_pressure_commanded
+    semantic: engine.rail_pressure_commanded
+    version: 1
+    description: >-
+      High fuel pressure, commanded.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x116A"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 100
+      offset: 0
+    unit: "hPa"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.fuel.flow_instant
+    semantic: fuel.flow_instant
+    version: 1
+    description: >-
+      Instantaneous fuel flow.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x111A"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "l/h"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.fuel.metering_valve_duty
+    semantic: fuel.metering_valve_duty
+    version: 1
+    description: >-
+      Fuel metering valve duty cycle.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1148"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "%"
+    plausible_range:
+      minimum: 0
+      maximum: 100
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.fuel.pressure_regulator_duty
+    semantic: fuel.pressure_regulator_duty
+    version: 1
+    description: >-
+      Fuel pressure regulator duty cycle.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11BF"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "%"
+    plausible_range:
+      minimum: 0
+      maximum: 100
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.fuel.rail_pressure_control_deviation
+    semantic: fuel.rail_pressure_control_deviation
+    version: 1
+    description: >-
+      High fuel pressure control deviation.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x121F"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 100
+      offset: 0
+    unit: "hPa"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.fuel.rail_pressure_regulator_valve_specified
+    semantic: fuel.rail_pressure_regulator_valve_specified
+    version: 1
+    description: >-
+      Fuel pressure regulator valve, specified rail pressure.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x121E"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 100
+      offset: 0
+    unit: "hPa"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.gear.engaged
+    semantic: gear.engaged
+    version: 1
+    description: >-
+      Engaged gear number as raw integer.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x100D"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 1
+    decoder:
+      type: linear_integer
+      width_bytes: 1
+      endian: big
+      signed: true
+      scale: 1
+      offset: 0
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.gear.input_shaft_speed
+    semantic: gear.input_shaft_speed
+    version: 1
+    description: >-
+      Transmission input shaft speed as reported by the engine ECU.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11F1"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.5
+      offset: 0
+    unit: "1/min"
+    plausible_range:
+      minimum: 0
+      maximum: 8000
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.injector1_rail_pressure_calibration_point1
+    semantic: injection.injector1_rail_pressure_calibration_point1
+    version: 1
+    description: >-
+      Injector 1 calibration value at rail pressure point 1.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10D0"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.05
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.injector1_rail_pressure_calibration_point2
+    semantic: injection.injector1_rail_pressure_calibration_point2
+    version: 1
+    description: >-
+      Injector 1 calibration value at rail pressure point 2.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10D6"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.05
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.injector1_rail_pressure_calibration_point3
+    semantic: injection.injector1_rail_pressure_calibration_point3
+    version: 1
+    description: >-
+      Injector 1 calibration value at rail pressure point 3.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10DC"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.05
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.injector2_rail_pressure_calibration_point1
+    semantic: injection.injector2_rail_pressure_calibration_point1
+    version: 1
+    description: >-
+      Injector 2 calibration value at rail pressure point 1.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10D3"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.05
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.injector2_rail_pressure_calibration_point2
+    semantic: injection.injector2_rail_pressure_calibration_point2
+    version: 1
+    description: >-
+      Injector 2 calibration value at rail pressure point 2.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10D9"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.05
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.injector2_rail_pressure_calibration_point3
+    semantic: injection.injector2_rail_pressure_calibration_point3
+    version: 1
+    description: >-
+      Injector 2 calibration value at rail pressure point 3.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10DF"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.05
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.injector3_rail_pressure_calibration_point1
+    semantic: injection.injector3_rail_pressure_calibration_point1
+    version: 1
+    description: >-
+      Injector 3 calibration value at rail pressure point 1.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10D1"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.05
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.injector3_rail_pressure_calibration_point3
+    semantic: injection.injector3_rail_pressure_calibration_point3
+    version: 1
+    description: >-
+      Injector 3 calibration value at rail pressure point 3.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10DD"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.05
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.injector4_rail_pressure_calibration_point2
+    semantic: injection.injector4_rail_pressure_calibration_point2
+    version: 1
+    description: >-
+      Injector 4 calibration value at rail pressure point 2.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10D8"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.05
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.injector4_rail_pressure_calibration_point3
+    semantic: injection.injector4_rail_pressure_calibration_point3
+    version: 1
+    description: >-
+      Injector 4 calibration value at rail pressure point 3.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10DE"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.05
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.main_duration
+    semantic: injection.main_duration
+    version: 1
+    description: >-
+      Main injection, duration.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x14CF"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.4
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.main_start
+    semantic: injection.main_start
+    version: 1
+    description: >-
+      Main injection, start angle.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11F2"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.02
+      offset: 0
+    unit: "°"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.post_injection1_duration
+    semantic: injection.post_injection1_duration
+    version: 1
+    description: >-
+      Post-injection 1, duration.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x14CC"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.4
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.post_injection1_start
+    semantic: injection.post_injection1_start
+    version: 1
+    description: >-
+      Post-injection 1, start angle.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11F4"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.02
+      offset: 0
+    unit: "°"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.post_injection2_duration
+    semantic: injection.post_injection2_duration
+    version: 1
+    description: >-
+      Post-injection 2, duration.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x14CD"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.4
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.post_injection2_start
+    semantic: injection.post_injection2_start
+    version: 1
+    description: >-
+      Post-injection 2, start angle.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11F3"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.02
+      offset: 0
+    unit: "°"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.post_injection3_duration
+    semantic: injection.post_injection3_duration
+    version: 1
+    description: >-
+      Post-injection 3, activation duration.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x14CE"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.4
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.post_injection3_start
+    semantic: injection.post_injection3_start
+    version: 1
+    description: >-
+      Post-injection 3, start angle.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1131"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.02
+      offset: 0
+    unit: "°"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.pre_injection1_duration
+    semantic: injection.pre_injection1_duration
+    version: 1
+    description: >-
+      Pre-injection 1, duration.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x14D0"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.4
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.pre_injection1_start
+    semantic: injection.pre_injection1_start
+    version: 1
+    description: >-
+      Pre-injection 1, start angle.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x14C7"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.02
+      offset: 0
+    unit: "°"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.pre_injection2_duration
+    semantic: injection.pre_injection2_duration
+    version: 1
+    description: >-
+      Pre-injection 2, duration.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x14D1"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.4
+      offset: 0
+    unit: "µs"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.pre_injection2_start
+    semantic: injection.pre_injection2_start
+    version: 1
+    description: >-
+      Pre-injection 2, start angle.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x14C8"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.02
+      offset: 0
+    unit: "°"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.quantity_deviation_cylinder1
+    semantic: injection.quantity_deviation_cylinder1
+    version: 1
+    description: >-
+      Injection quantity deviation, cylinder 1.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x10FF"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "mg/Hub"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.quantity_deviation_cylinder2
+    semantic: injection.quantity_deviation_cylinder2
+    version: 1
+    description: >-
+      Injection quantity deviation, cylinder 2.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1105"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "mg/Hub"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.quantity_deviation_cylinder3
+    semantic: injection.quantity_deviation_cylinder3
+    version: 1
+    description: >-
+      Injection quantity deviation, cylinder 3.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1100"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "mg/Hub"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.quantity_deviation_cylinder4
+    semantic: injection.quantity_deviation_cylinder4
+    version: 1
+    description: >-
+      Injection quantity deviation, cylinder 4.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1104"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "mg/Hub"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.injection.start_quantity
+    semantic: injection.start_quantity
+    version: 1
+    description: >-
+      Injection quantity for engine start.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1069"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.01
+      offset: 0
+    unit: "mg/Hub"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.oil.oil_temperature
+    semantic: engine.oil_temperature
+    version: 1
+    description: >-
+      Engine oil temperature.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11BE"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.1
+      offset: -273.1
+    unit: "°C"
+    plausible_range:
+      minimum: -60
+      maximum: 300
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.oil.level
+    semantic: oil.level
+    version: 1
+    description: >-
+      Engine oil level.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11BC"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.004
+      offset: 0
+    unit: "mm"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.oil.level_critical
+    semantic: oil.level_critical
+    version: 1
+    description: >-
+      Critical engine oil level.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11BD"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.004
+      offset: 0
+    unit: "mm"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.oil.temperature_2
+    semantic: oil.temperature_2
+    version: 1
+    description: >-
+      Engine oil temperature, second value.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x179C"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: false
+      scale: 0.1
+      offset: -273.1
+    unit: "°C"
+    plausible_range:
+      minimum: -60
+      maximum: 300
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.pedal.accelerator_sensor_1
+    semantic: pedal.accelerator_sensor_1
+    version: 1
+    description: >-
+      Accelerator pedal position sensor 1 voltage.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1221"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.2
+      offset: 0
+    unit: "mV"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.pedal.accelerator_sensor_2
+    semantic: pedal.accelerator_sensor_2
+    version: 1
+    description: >-
+      Accelerator pedal position sensor 2 voltage.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x102E"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.2
+      offset: 0
+    unit: "mV"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.torque.ac_compressor
+    semantic: torque.ac_compressor
+    version: 1
+    description: >-
+      Torque demanded by the air conditioning compressor.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x104B"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.1
+      offset: 0
+    unit: "Nm"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.torque.engine
+    semantic: torque.engine
+    version: 1
+    description: >-
+      Engine torque.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1047"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.1
+      offset: 0
+    unit: "Nm"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.torque.limitation_accelerator_pedal
+    semantic: torque.limitation_accelerator_pedal
+    version: 1
+    description: >-
+      Torque limitation, accelerator pedal path.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x11A6"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.1
+      offset: 0
+    unit: "Nm"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.torque.limitation_smoke
+    semantic: torque.limitation_smoke
+    version: 1
+    description: >-
+      Torque limitation, smoke limiter path.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x1301"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.1
+      offset: 0
+    unit: "Nm"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated
+  - id: vag.ea189.torque.limitation_torque
+    semantic: torque.limitation_torque
+    version: 1
+    description: >-
+      Torque limitation, torque request path.
+    applicability:
+      kind: ecu_fingerprint
+      predicates:
+        - { field: vehicle.manufacturer, equals: vag }
+        - { field: ecu.logical_role, equals: engine }
+      provenance:
+        classification: INFERRED
+        confidence: low
+        sources:
+          - kind: research
+            citation: "Engine ECU only; the EA189 engine identification predicates are pending real F187/F189 evidence (obdentic #85)."
+    operation:
+      type: uds.read_data_by_identifier
+      identifier: "0x106B"
+      ecu_role: engine
+    response:
+      positive_service: "0x62"
+      identifier_echo: true
+      exact_payload_length: 2
+    decoder:
+      type: linear_integer
+      width_bytes: 2
+      endian: big
+      signed: true
+      scale: 0.1
+      offset: 0
+    unit: "Nm"
+    provenance:
+      classification: COMMUNITY
+      confidence: low
+      sources:
+        - kind: community
+          citation: "locally extracted Car Scanner 2.1.50 EA189 profile (private), 124 entries"
+    hardware_validation:
+      status: not_validated

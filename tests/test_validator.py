@@ -77,12 +77,30 @@ definitions:
 """
 
 
+VALID_V3_DOCUMENT = """\
+schema_version: 3
+namespace: test.ecu_targets
+ecu_targets:
+  - id: test.ecu_target.7e0
+    addressing: { family: can_11bit, request_id: "7E0", response_id: "7E8", response_id_rule: iso15765_plus_8, response_id_stated_in_source: false }
+    transport: iso_tp_can
+    logical_role: { value: engine, confidence: medium }
+    applicability: { vehicle_manufacturer: test }
+    provenance:
+      classification: COMMUNITY
+      confidence: medium
+      sources:
+        - { kind: community_archive, citation: synthetic fixture, profile_count: 2, profile_total: 3, plain_read_profile_count: 2 }
+    hardware_validation: { status: not_validated }
+"""
+
+
 class ValidatorTests(unittest.TestCase):
     def make_repo(self, documents: list[tuple[str, str]] | str) -> Path:
         temp_dir = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, temp_dir)
         (temp_dir / "schema").mkdir(parents=True)
-        for name in ("knowledge-v1.schema.json", "knowledge-v2.schema.json"):
+        for name in ("knowledge-v1.schema.json", "knowledge-v2.schema.json", "knowledge-v3.schema.json"):
             shutil.copy(Path("schema") / name, temp_dir / "schema" / name)
 
         if isinstance(documents, str):
@@ -227,6 +245,61 @@ class ValidatorTests(unittest.TestCase):
         first = validate_repository(repo)
         second = validate_repository(repo)
         self.assertEqual(first, second)
+
+    def test_v3_ecu_targets_document_passes(self) -> None:
+        self.assertEqual(
+            validate_repository(
+                self.make_repo([("manufacturers/test/ecu-targets.yaml", VALID_V3_DOCUMENT)])
+            ),
+            [],
+        )
+
+    def test_v3_rejects_wrong_response_offset(self) -> None:
+        document = VALID_V3_DOCUMENT.replace('response_id: "7E8"', 'response_id: "7E9"')
+        errors = validate_repository(
+            self.make_repo([("manufacturers/test/ecu-targets.yaml", document)])
+        )
+        self.assertTrue(any("does not follow rule" in error for error in errors), errors)
+
+    def test_v3_rejects_29bit_and_unknown_fields(self) -> None:
+        for bad in (
+            VALID_V3_DOCUMENT.replace('request_id: "7E0"', 'request_id: "17FC0076"'),
+            VALID_V3_DOCUMENT.replace("transport: iso_tp_can", "transport: iso_tp_can\n    session: extended"),
+        ):
+            errors = validate_repository(
+                self.make_repo([("manufacturers/test/ecu-targets.yaml", bad)])
+            )
+            self.assertTrue(errors)
+
+    def test_definition_ecu_role_must_exist_in_targets(self) -> None:
+        definition = VALID_V2_DOCUMENT.replace(
+            'identifier: "0x1234"', 'identifier: "0x1234"\n      ecu_role: transmission'
+        )
+        errors = validate_repository(
+            self.make_repo(
+                [
+                    ("manufacturers/test/ecu-targets.yaml", VALID_V3_DOCUMENT),
+                    ("manufacturers/test/defs.yaml", definition),
+                ]
+            )
+        )
+        self.assertTrue(any("references ecu_role" in error for error in errors), errors)
+
+
+    def test_repository_ea189_files_follow_group_and_session_conventions(self) -> None:
+        import yaml
+
+        for name, prefix in (
+            ("ea189-engine.yaml", "vag.ea189."),
+            ("ea189-engine-session-candidates.yaml", "vag.ea189_session."),
+        ):
+            document = yaml.safe_load(Path("manufacturers/vag", name).read_text("utf-8"))
+            for definition in document["definitions"]:
+                self.assertTrue(definition["id"].startswith(prefix), definition["id"])
+                self.assertEqual(definition["operation"]["ecu_role"], "engine")
+                self.assertEqual(definition["hardware_validation"]["status"], "not_validated")
+                self.assertEqual(definition["provenance"]["classification"], "COMMUNITY")
+        self.assertEqual(validate_repository(Path(".").resolve()), [])
 
 
 if __name__ == "__main__":

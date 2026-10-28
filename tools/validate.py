@@ -19,6 +19,7 @@ else:
 SCHEMA_PATHS = {
     1: Path("schema/knowledge-v1.schema.json"),
     2: Path("schema/knowledge-v2.schema.json"),
+    3: Path("schema/knowledge-v3.schema.json"),
 }
 KNOWLEDGE_ROOTS = (Path("standards"), Path("manufacturers"), Path("semantic"))
 ECU_IDENTIFICATION_SET = "uds.standard.ecu_identification"
@@ -73,6 +74,42 @@ def _validators(root: Path) -> dict[int, Draft202012Validator]:
     return validators
 
 
+def _ecu_target_errors(path: Path, document: dict[str, Any]) -> list[str]:
+    """Repository-level invariants for schema v3 ecu_targets documents."""
+    errors: list[str] = []
+    seen: dict[str, set[str]] = {"id": set(), "request": set(), "response": set()}
+    for target in document["ecu_targets"]:
+        addressing = target["addressing"]
+        request_id, response_id = addressing["request_id"], addressing["response_id"]
+        for kind, value in (
+            ("id", target["id"]),
+            ("request", request_id),
+            ("response", response_id),
+        ):
+            if value in seen[kind]:
+                errors.append(f"{path}: duplicate target {kind} {value!r}")
+            seen[kind].add(value)
+        expected = 8 if addressing["response_id_rule"] == "iso15765_plus_8" else 0x6A
+        if int(response_id, 16) - int(request_id, 16) != expected:
+            errors.append(
+                f"{path}: target {target['id']!r} response id {response_id} does not "
+                f"follow rule {addressing['response_id_rule']}"
+            )
+        for source in target["provenance"]["sources"]:
+            count, total = source.get("profile_count"), source.get("profile_total")
+            plain = source.get("plain_read_profile_count")
+            if count is not None and total is not None and count > total:
+                errors.append(f"{path}: target {target['id']!r} profile_count > profile_total")
+            if plain is not None and count is not None and plain > count:
+                errors.append(
+                    f"{path}: target {target['id']!r} plain_read_profile_count > profile_count"
+                )
+    overlap = seen["request"] & seen["response"]
+    if overlap:
+        errors.append(f"{path}: request/response id overlap {sorted(overlap)}")
+    return errors
+
+
 def validate_repository(root: Path) -> list[str]:
     validators = _validators(root)
 
@@ -86,6 +123,8 @@ def validate_repository(root: Path) -> list[str]:
         str, list[tuple[Path, int, dict[str, Any]]]
     ] = {}
     sets: dict[str, tuple[Path, dict[str, Any]]] = {}
+    target_roles: set[str] = set()
+    referenced_roles: list[tuple[Path, str, str]] = []
 
     for path in files:
         document = _load_yaml(path)
@@ -105,7 +144,15 @@ def validate_repository(root: Path) -> list[str]:
         if schema_errors:
             continue
 
+        if schema_version == 3:
+            errors.extend(_ecu_target_errors(path, document))
+            target_roles.update(t["logical_role"]["value"] for t in document["ecu_targets"])
+            continue
+
         for definition in document["definitions"]:
+            role = definition["operation"].get("ecu_role")
+            if role is not None:
+                referenced_roles.append((path, definition["id"], role))
             definition_id = definition["id"]
             semantic_id = definition["semantic"]
             if definition_id in definition_ids:
@@ -135,6 +182,14 @@ def validate_repository(root: Path) -> list[str]:
                 )
             else:
                 sets[set_id] = (path, definition_set)
+
+    if target_roles:
+        for path, definition_id, role in referenced_roles:
+            if role not in target_roles:
+                errors.append(
+                    f"{path}: definition {definition_id!r} references ecu_role "
+                    f"{role!r} that no ecu_targets entry declares"
+                )
 
     for semantic_id, candidates in sorted(semantic_definitions.items()):
         if len(candidates) < 2:
